@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecodubi — Cuerpo Técnico</title>
+    <style>
+        :root {
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f1f5f9;
+            --border-color: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent-blue: #0284c7;
+            --accent-blue-light: #e0f2fe;
+            --accent-gold: #d97706;
+            --accent-red: #dc2626;
+            --accent-green: #059669;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(circle at top right, #e0f2fe 0%, transparent 40%), radial-gradient(circle at bottom left, #f1f5f9 0%, transparent 40%);
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        header h1 { font-size: 18px; font-weight: 600; letter-spacing: 0.3px; display: flex; align-items: center; gap: 10px; color: var(--text-main); }
+
+        .header-buttons { display: flex; gap: 12px; }
+
+        .btn-action-header {
+            background: var(--accent-blue-light);
+            border: 1px solid rgba(2, 132, 199, 0.2);
+            color: var(--accent-blue);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            display: none;
+            transition: all 0.2s ease;
+        }
+        .btn-action-header:hover { background: #bae6fd; transform: translateY(-1px); }
+
+        .btn-logout {
+            background: #fee2e2;
+            border-color: rgba(220, 38, 38, 0.2);
+            color: var(--accent-red);
+        }
+        .btn-logout:hover { background: #fecaca; }
+
+        .main-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; width: 100%; flex: 1; }
+
+        .hero-title { text-align: center; font-size: 28px; font-weight: 700; margin-bottom: 8px; color: var(--text-main); letter-spacing: -0.5px; }
+        .hero-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 40px; font-size: 15px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--accent-blue);
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        .card:hover {
+            border-color: #cbd5e1;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            background: var(--bg-card-hover);
+        }
+        .card.admin-card::before { background: var(--accent-gold); }
+        .card.admin-card:hover { border-color: #fcd34d; }
+
+        .card h3 { font-size: 17px; color: var(--text-main); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+        .card p { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin: 0; }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            width: 100%;
+            max-width: 420px;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .modal h3 { color: var(--text-main); margin-bottom: 20px; font-size: 20px; font-weight: 600; }
+        .modal input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 15px;
+            text-align: center;
+            outline: none;
+        }
+        .modal input:focus { border-color: var(--accent-blue); background: #ffffff; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1); }
+
+        .modal-buttons { display: flex; gap: 12px; margin-top: 10px; }
+        .btn-submit { flex: 1; background: var(--accent-blue); color: #ffffff; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; }
+        .btn-cancel { flex: 1; background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 14px; }
+
+        .error-msg { color: var(--accent-red); font-size: 13px; margin-bottom: 14px; display: none; background: #fee2e2; padding: 8px; border-radius: 6px; border: 1px solid rgba(220, 38, 38, 0.1); }
+        .success-msg { color: var(--accent-green); font-size: 13px; margin-bottom: 14px; display: none; font-weight: 500; background: #d1fae5; padding: 8px; border-radius: 6px; border: 1px solid rgba(5, 150, 105, 0.1); }
+
+        .panel-content { display: none; background: var(--bg-card); padding: 32px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03); border: 1px solid var(--border-color); }
+        .panel-content h2 { color: var(--text-main); margin-bottom: 8px; font-size: 22px; font-weight: 600; }
+        .panel-list { list-style: none; margin-top: 20px; }
+        .panel-list li {
+            padding: 16px 20px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            margin-bottom: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-btn {
+            background: var(--accent-blue);
+            color: #ffffff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .section-badge { display: inline-block; background: var(--accent-blue-light); color: var(--accent-blue); padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-bottom: 16px; border: 1px solid rgba(2, 132, 199, 0.2); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 id="header-title">🛡 Ecodubi — Cuerpo Técnico</h1>
+        <div class="header-buttons">
+            <button class="btn-action-header" id="btn-change-pass" onclick="abrirModalCambioPass()">⚙️ Cambiar Contraseña</button>
+            <button class="btn-action-header btn-logout" id="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- VISTA SELECCIÓN DE PERFILES -->
+        <div id="selector-view" style="display: block;">
+            <h2 class="hero-title">Portal de Acceso Autorizado</h2>
+            <p class="hero-subtitle">Selecciona tu área correspondiente e introduce tu credencial de seguridad</p>
+
+            <div class="grid">
+                <div class="card admin-card" onclick="pedirPassword('admin')">
+                    <h3>👑 Administrador General</h3>
+                    <p>Supervisión global sobre sesiones, planificación prepartido y seguimiento en directo.</p>
+                </div>
+                <div class="card" onclick="pedirPassword('head_coach')">
+                    <h3>⚽ Primer Entrenador</h3>
+                    <p>Dirección del prepartido, toma de decisiones tácticas y seguimiento de encuentro.</p>
+                </div>
+                <div class="card" onclick="pedirPassword('assistant_coach')">
+                    <h3>📋 Segundo Entrenador</h3>
+                    <p>Diseño y ejecución de sesiones de entrenamiento y apoyo en prepartido.</p>
+                </div>
+                <div class="card" onclick="pedirPassword('fitness_coach')">
+                    <h3>🏋 Preparador Físico</h3>
+                    <p>Control de cargas en entrenamientos y preparación física prepartido.</p>
+                </div>
+                <div class="card" onclick="pedirPassword('delegate')">
+                    <h3>📄 Delegado de Equipo</h3>
+                    <p>Logística de partidos, actas y gestión de convocatorias para el prepartido.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL DE LOGIN -->
+        <div id="password-modal" class="modal-overlay">
+            <div class="modal">
+                <h3 id="modal-title">Introduce la Contraseña</h3>
+                <div id="login-error" class="error-msg">Contraseña incorrecta. Inténtalo de nuevo.</div>
+                <input type="password" id="pass-input" placeholder="••••••••" onkeypress="if(event.key === 'Enter') validarPassword()">
+                <div class="modal-buttons">
+                    <button class="btn-submit" onclick="validarPassword()">Acceder</button>
+                    <button class="btn-cancel" onclick="cancelarPassword()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL DE CAMBIO DE CONTRASEÑA -->
+        <div id="change-pass-modal" class="modal-overlay">
+            <div class="modal">
+                <h3>Cambiar Contraseña</h3>
+                <div id="change-error" class="error-msg">Contraseña actual incorrecta o formato inválido.</div>
+                <div id="change-success" class="success-msg">¡Contraseña actualizada correctamente!</div>
+                <input type="password" id="old-pass" placeholder="Contraseña actual...">
+                <input type="password" id="new-pass" placeholder="Nueva (mínimo 4 caracteres)...">
+                <input type="password" id="confirm-pass" placeholder="Confirmar nueva contraseña...">
+                <div class="modal-buttons">
+                    <button class="btn-submit" onclick="procesarCambioPassword()">Guardar</button>
+                    <button class="btn-cancel" onclick="cerrarModalCambioPass()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANELES -->
+        <div id="panel-admin" class="panel-content">
+            <h2>👑 Panel Global — Administrador General</h2>
+            <span class="section-badge">Supervisión Transversal</span>
+            <ul class="panel-list">
+                <li>1. Sesiones de Entrenamiento <button class="action-btn" onclick="alert('Abriendo supervisión de sesiones...')">Acceder</button></li>
+                <li>2. Prepartido (Táctica y Convocatoria) <button class="action-btn" onclick="alert('Abriendo planificación prepartido...')">Acceder</button></li>
+                <li>3. Seguimiento de Partido <a class="action-btn" href="/seguimiento-partido/" target="_blank">Abrir Módulo</a></li>
+            </ul>
+        </div>
+
+        <div id="panel-head_coach" class="panel-content">
+            <h2>⚽ Panel de Control — Primer Entrenador</h2>
+            <span class="section-badge">Dirección Técnica</span>
+            <ul class="panel-list">
+                <li>1. Sesiones de Entrenamiento <button class="action-btn" onclick="alert('Abriendo planificación de entrenamientos...')">Acceder</button></li>
+                <li>2. Prepartido (Once Inicial y Análisis Rival) <button class="action-btn" onclick="alert('Abriendo prepartido...')">Acceder</button></li>
+                <li>3. Seguimiento de Partido <a class="action-btn" href="/seguimiento-partido/" target="_blank">Abrir Módulo</a></li>
+            </ul>
+        </div>
+
+        <div id="panel-assistant_coach" class="panel-content">
+            <h2>📋 Panel de Control — Segundo Entrenador</h2>
+            <span class="section-badge">Campo y Planificación</span>
+            <ul class="panel-list">
+                <li>1. Sesiones de Entrenamiento (Tareas y ABP) <button class="action-btn" onclick="alert('Abriendo creador de sesiones...')">Acceder</button></li>
+                <li>2. Prepartido <button class="action-btn" onclick="alert('Abriendo prepartido...')">Acceder</button></li>
+                <li>3. Seguimiento de Partido <a class="action-btn" href="/seguimiento-partido/" target="_blank">Abrir Módulo</a></li>
+            </ul>
+        </div>
+
+        <div id="panel-fitness_coach" class="panel-content">
+            <h2>🏋 Panel de Control — Preparador Físico</h2>
+            <span class="section-badge">Rendimiento y Salud</span>
+            <ul class="panel-list">
+                <li>1. Sesiones de Entrenamiento (Cargas y GPS) <button class="action-btn" onclick="alert('Abriendo control de cargas...')">Acceder</button></li>
+                <li>2. Prepartido (Activación y Calentamiento) <button class="action-btn" onclick="alert('Abriendo planificación física prepartido...')">Acceder</button></li>
+                <li>3. Seguimiento de Partido <a class="action-btn" href="/seguimiento-partido/" target="_blank">Abrir Módulo</a></li>
+            </ul>
+        </div>
+
+        <div id="panel-delegate" class="panel-content">
+            <h2>📄 Panel de Control — Delegado de Equipo</h2>
+            <span class="section-badge">Gestión Federativa y Logística</span>
+            <ul class="panel-list">
+                <li>1. Sesiones de Entrenamiento (Instalaciones y Material) <button class="action-btn" onclick="alert('Abriendo gestión de material...')">Acceder</button></li>
+                <li>2. Prepartido (Convocatoria, Licencias y Actas) <button class="action-btn" onclick="alert('Abriendo gestión prepartido del delegado...')">Acceder</button></li>
+                <li>3. Seguimiento de Partido <a class="action-btn" href="/seguimiento-partido/" target="_blank">Abrir Módulo</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const defaultCredenciales = {
+            'admin': { pass: 'admin2026', nombre: 'Administrador General' },
+            'head_coach': { pass: 'coach123', nombre: 'Primer Entrenador' },
+            'assistant_coach': { pass: 'segundo456', nombre: 'Segundo Entrenador' },
+            'fitness_coach': { pass: 'fisico789', nombre: 'Preparador Físico' },
+            'delegate': { pass: 'delegado99', nombre: 'Delegado de Equipo' }
+        };
+
+        function obtenerCredenciales() {
+            const guardadas = localStorage.getItem('ecodubi_creds');
+            return guardadas ? JSON.parse(guardadas) : defaultCredenciales;
+        }
+
+        let rolSeleccionado = '';
+
+        function pedirPassword(rol) {
+            rolSeleccionado = rol;
+            const creds = obtenerCredenciales();
+            document.getElementById('password-modal').style.display = 'flex';
+            document.getElementById('modal-title').innerText = 'Contraseña para: ' + (creds[rol] ? creds[rol].nombre : rol);
+            document.getElementById('pass-input').value = '';
+            document.getElementById('login-error').style.display = 'none';
+            document.getElementById('pass-input').focus();
+        }
+
+        function cancelarPassword() {
+            document.getElementById('password-modal').style.display = 'none';
+            rolSeleccionado = '';
+        }
+
+        function validarPassword() {
+            const inputVal = document.getElementById('pass-input').value;
+            const creds = obtenerCredenciales();
+
+            if (creds[rolSeleccionado] && creds[rolSeleccionado].pass === inputVal) {
+                document.getElementById('password-modal').style.display = 'none';
+                document.getElementById('selector-view').style.display = 'none';
+                document.querySelectorAll('.panel-content').forEach(p => p.style.display = 'none');
+
+                const panelTarget = document.getElementById('panel-' + rolSeleccionado);
+                if (panelTarget) {
+                    panelTarget.style.display = 'block';
+                }
+
+                document.getElementById('btn-logout').style.display = 'inline-block';
+                document.getElementById('btn-change-pass').style.display = 'inline-block';
+                document.getElementById('header-title').innerHTML = '🛡️ Ecodubi — <span style="color:var(--accent-blue)">' + creds[rolSeleccionado].nombre + '</span>';
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+                document.getElementById('pass-input').value = '';
+                document.getElementById('pass-input').focus();
+            }
+        }
+
+        function abrirModalCambioPass() {
+            document.getElementById('old-pass').value = '';
+            document.getElementById('new-pass').value = '';
+            document.getElementById('confirm-pass').value = '';
+            document.getElementById('change-error').style.display = 'none';
+            document.getElementById('change-success').style.display = 'none';
+            document.getElementById('change-pass-modal').style.display = 'flex';
+        }
+
+        function cerrarModalCambioPass() {
+            document.getElementById('change-pass-modal').style.display = 'none';
+        }
+
+        function procesarCambioPassword() {
+            const oldPass = document.getElementById('old-pass').value;
+            const newPass = document.getElementById('new-pass').value;
+            const confirmPass = document.getElementById('confirm-pass').value;
+
+            const creds = obtenerCredenciales();
+
+            if (!creds[rolSeleccionado] || creds[rolSeleccionado].pass !== oldPass || newPass.length < 4 || newPass !== confirmPass) {
+                document.getElementById('change-error').style.display = 'block';
+                document.getElementById('change-success').style.display = 'none';
+                return;
+            }
+
+            creds[rolSeleccionado].pass = newPass;
+            localStorage.setItem('ecodubi_creds', JSON.stringify(creds));
+
+            document.getElementById('change-error').style.display = 'none';
+            document.getElementById('change-success').style.display = 'block';
+
+            setTimeout(() => {
+                cerrarModalCambioPass();
+            }, 1500);
+        }
+
+        function cerrarSesion() {
+            document.querySelectorAll('.panel-content').forEach(p => p.style.display = 'none');
+            document.getElementById('selector-view').style.display = 'block';
+            document.getElementById('btn-logout').style.display = 'none';
+            document.getElementById('btn-change-pass').style.display = 'none';
+            document.getElementById('header-title').innerText = '🛡 Ecodubi — Cuerpo Técnico';
+            rolSeleccionado = '';
+        }
+    </script>
+</body>
+</html>
