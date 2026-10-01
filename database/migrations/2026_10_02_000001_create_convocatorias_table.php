@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('convocatorias', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('partido_id')->constrained()->onDelete('cascade');
-            $table->foreignId('jugador_id')->constrained()->onDelete('cascade');
+            $table->foreignId('partido_id')->constrained('partidos')->onDelete('cascade');
+            $table->foreignId('jugador_id')->constrained('jugadores')->onDelete('cascade');
             $table->boolean('titular')->default(false);
             $table->timestamps();
             $table->unique(['partido_id', 'jugador_id']);
