@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\CambiarPasswordRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,6 +26,23 @@ class AuthController extends Controller
             'user' => new UserResource($user),
             'token' => $token,
         ]);
+    }
+
+    public function cambiarPassword(CambiarPasswordRequest $request)
+    {
+        $datos = $request->validated();
+        $user = $request->user();
+
+        if (! Hash::check($datos['password_actual'], $user->password)) {
+            return response()->json(['message' => 'La contraseña actual no es correcta'], 422);
+        }
+
+        $user->update([
+            'password' => bcrypt($datos['password_nueva']),
+            'password_actualizada' => true,
+        ]);
+
+        return response()->json(['user' => new UserResource($user)]);
     }
 
     public function logout(Request $request)

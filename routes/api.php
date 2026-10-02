@@ -19,6 +19,7 @@ Route::post('/restablecer-password', [PasswordResetController::class, 'restablec
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', fn (Request $request) => new UserResource($request->user()));
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/cambiar-password', [AuthController::class, 'cambiarPassword']);
 
     Route::apiResource('partidos', PartidoController::class);
     Route::apiResource('jugadores', JugadorController::class);
