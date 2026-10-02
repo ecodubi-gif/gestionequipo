@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cambiar-password', [AuthController::class, 'cambiarPassword']);
 
     Route::apiResource('partidos', PartidoController::class);
-    Route::apiResource('jugadores', JugadorController::class);
+    Route::apiResource('jugadores', JugadorController::class)->parameters(['jugadores' => 'jugador']);
 
     Route::get('/partidos/{partido}/convocatoria', [ConvocatoriaController::class, 'index']);
     Route::post('/partidos/{partido}/convocatoria', [ConvocatoriaController::class, 'store']);
