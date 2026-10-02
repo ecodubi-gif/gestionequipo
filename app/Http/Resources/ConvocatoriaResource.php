@@ -12,6 +12,7 @@ class ConvocatoriaResource extends JsonResource
         return [
             'id' => $this->id,
             'titular' => $this->titular,
+            'capitan' => $this->capitan,
             'jugador' => new JugadorResource($this->whenLoaded('jugador')),
         ];
     }

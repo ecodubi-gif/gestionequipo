@@ -23,6 +23,7 @@ class ConvocatoriaController extends Controller
             $partido->convocatorias()->create([
                 'jugador_id' => $j['jugador_id'],
                 'titular' => $j['titular'],
+                'capitan' => $j['capitan'] ?? false,
             ]);
         }
 

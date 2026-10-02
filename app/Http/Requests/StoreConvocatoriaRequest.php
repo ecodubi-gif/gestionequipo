@@ -14,6 +14,7 @@ class StoreConvocatoriaRequest extends FormRequest
             'jugadores' => 'required|array',
             'jugadores.*.jugador_id' => 'required|exists:jugadores,id',
             'jugadores.*.titular' => 'required|boolean',
+            'jugadores.*.capitan' => 'nullable|boolean',
         ];
     }
 }

@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Convocatoria extends Model
 {
-    protected $fillable = ['partido_id', 'jugador_id', 'titular'];
-    protected $casts = ['titular' => 'boolean'];
+    protected $fillable = ['partido_id', 'jugador_id', 'titular', 'capitan'];
+    protected $casts = ['titular' => 'boolean', 'capitan' => 'boolean'];
 
     public function partido() { return $this->belongsTo(Partido::class); }
     public function jugador() { return $this->belongsTo(Jugador::class); }
