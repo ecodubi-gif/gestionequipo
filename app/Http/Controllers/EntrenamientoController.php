@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEntrenamientoRequest;
 use App\Http\Requests\UpdateEntrenamientoRequest;
+use App\Http\Requests\EditarMaterialRequest;
 use App\Http\Resources\EntrenamientoResource;
 use App\Models\Entrenamiento;
 
@@ -39,6 +40,13 @@ class EntrenamientoController extends Controller
     {
         $this->authorize('update', $entrenamiento);
         $entrenamiento->update($request->validated());
+        return new EntrenamientoResource($entrenamiento);
+    }
+
+    public function editarMaterial(EditarMaterialRequest $request, Entrenamiento $entrenamiento)
+    {
+        $this->authorize('editarMaterial', $entrenamiento);
+        $entrenamiento->update(['material' => $request->validated('material')]);
         return new EntrenamientoResource($entrenamiento);
     }
 

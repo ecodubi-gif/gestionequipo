@@ -17,7 +17,7 @@ class AsistenciaController extends Controller
 
     public function store(StoreAsistenciaRequest $request, Entrenamiento $entrenamiento)
     {
-        $this->authorize('update', $entrenamiento);
+        $this->authorize('gestionarAsistencia', $entrenamiento);
 
         $entrenamiento->asistencias()->delete();
 

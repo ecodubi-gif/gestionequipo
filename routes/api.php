@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/eventos/{evento}', [EventoController::class, 'destroy']);
 
     Route::apiResource('entrenamientos', EntrenamientoController::class);
+    Route::put('/entrenamientos/{entrenamiento}/material', [EntrenamientoController::class, 'editarMaterial']);
     Route::get('/entrenamientos/{entrenamiento}/asistencias', [AsistenciaController::class, 'index']);
     Route::post('/entrenamientos/{entrenamiento}/asistencias', [AsistenciaController::class, 'store']);
 });
