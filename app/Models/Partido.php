@@ -9,6 +9,13 @@ class Partido extends Model
 {
     use HasFactory;
 
+    protected function casts(): array
+    {
+        return [
+            'fecha' => 'datetime',
+        ];
+    }
+
     protected $fillable = [
         'user_id',
         'equipo_local',
