@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ConvocatoriaController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\JugadorController;
@@ -10,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/olvide-password', [PasswordResetController::class, 'enviarCodigo']);
+Route::post('/restablecer-password', [PasswordResetController::class, 'restablecer']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', fn (Request $request) => new UserResource($request->user()));
