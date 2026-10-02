@@ -7,7 +7,7 @@ use App\Models\User;
 
 class JugadorPolicy
 {
-    private const ROLES_GESTION = ['entrenador', 'segundo_entrenador'];
+    private const ROLES_GESTION = ['delegado'];
 
     public function viewAny(User $user): bool { return true; }
     public function view(User $user, Jugador $jugador): bool { return true; }
