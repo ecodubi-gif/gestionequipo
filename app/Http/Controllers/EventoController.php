@@ -16,14 +16,14 @@ class EventoController extends Controller
 
     public function store(StoreEventoRequest $request, Partido $partido)
     {
-        $this->authorize('update', $partido);
+        $this->authorize('gestionarEnVivo', $partido);
         $evento = $partido->eventos()->create($request->validated());
         return new EventoResource($evento);
     }
 
     public function destroy(Evento $evento)
     {
-        $this->authorize('update', $evento->partido);
+        $this->authorize('gestionarEnVivo', $evento->partido);
         $evento->delete();
         return response()->json(['message' => 'Evento eliminado']);
     }

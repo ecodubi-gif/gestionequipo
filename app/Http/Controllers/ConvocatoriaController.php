@@ -15,7 +15,7 @@ class ConvocatoriaController extends Controller
 
     public function store(StoreConvocatoriaRequest $request, Partido $partido)
     {
-        $this->authorize('update', $partido);
+        $this->authorize('gestionarConvocatoria', $partido);
 
         $partido->convocatorias()->delete();
 
