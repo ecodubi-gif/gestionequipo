@@ -15,6 +15,9 @@ class StorePartidoRequest extends FormRequest
             'equipo_visitante' => 'required|string|max:255',
             'fecha' => 'required|date',
             'lugar' => 'required|string|max:255',
+            'es_local' => 'required|boolean',
+            'lugar_citacion' => 'nullable|string|max:255',
+            'hora_citacion' => 'nullable|date_format:H:i',
         ];
     }
 }
