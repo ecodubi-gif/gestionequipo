@@ -24,7 +24,10 @@ class Partido extends Model
         'lugar',
         'estado',
         'goles_local',
-        'goles_visitante'
+        'goles_visitante',
+        'es_local',
+        'lugar_citacion',
+        'hora_citacion',
     ];
 
     public function convocatorias()
