@@ -18,6 +18,8 @@ class JugadorResource extends JsonResource
             'posicion' => $this->posicion,
             'pierna' => $this->pierna,
             'estado' => $this->estado,
+            'readaptacion' => $this->readaptacion,
+            'observaciones' => $this->observaciones,
         ];
     }
 }

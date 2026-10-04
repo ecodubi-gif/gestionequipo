@@ -7,6 +7,7 @@ use App\Http\Controllers\EntrenamientoController;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\JugadorController;
+use App\Http\Controllers\JugadorNotasController;
 use App\Http\Controllers\PartidoController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
@@ -23,6 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('partidos', PartidoController::class);
     Route::apiResource('jugadores', JugadorController::class)->parameters(['jugadores' => 'jugador']);
+    Route::put('/jugadores/{jugador}/readaptacion', [JugadorNotasController::class, 'readaptacion']);
+    Route::put('/jugadores/{jugador}/observaciones', [JugadorNotasController::class, 'observaciones']);
 
     Route::get('/partidos/{partido}/convocatoria', [ConvocatoriaController::class, 'index']);
     Route::post('/partidos/{partido}/convocatoria', [ConvocatoriaController::class, 'store']);
