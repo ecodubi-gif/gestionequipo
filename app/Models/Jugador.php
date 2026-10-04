@@ -18,6 +18,6 @@ class Jugador extends Model
         'apodo',
         'posicion',
         'pierna',
-        'estado'
+        'estado', 'posicion_secundaria'
     ];
 }

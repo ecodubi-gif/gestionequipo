@@ -10,6 +10,7 @@ class JugadorResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'posicion_secundaria' => $this->posicion_secundaria,
             'id' => $this->id,
             'dorsal' => $this->dorsal,
             'nombre' => $this->nombre,

@@ -11,6 +11,7 @@ class UpdateJugadorRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'posicion_secundaria' => 'nullable|string|max:40',
             'dorsal' => 'nullable|integer',
             'nombre' => 'sometimes|required|string|max:255',
             'apellidos' => 'sometimes|required|string|max:255',
