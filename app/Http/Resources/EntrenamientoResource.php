@@ -10,6 +10,8 @@ class EntrenamientoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'tipo_sesion' => $this->tipo_sesion,
+            'bloques' => $this->bloques ? json_decode($this->bloques, true) : null,
             'id' => $this->id,
             'fecha' => $this->fecha,
             'hora' => $this->hora,

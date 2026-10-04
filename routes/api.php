@@ -39,3 +39,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/entrenamientos/{entrenamiento}/asistencias', [AsistenciaController::class, 'index']);
     Route::post('/entrenamientos/{entrenamiento}/asistencias', [AsistenciaController::class, 'store']);
 });
+
+require __DIR__ . '/plan_sesion.php';
