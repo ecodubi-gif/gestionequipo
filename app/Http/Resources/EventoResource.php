@@ -10,6 +10,7 @@ class EventoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'dorsal_rival' => $this->dorsal_rival,
             'id' => $this->id,
             'tipo' => $this->tipo,
             'equipo' => $this->equipo,

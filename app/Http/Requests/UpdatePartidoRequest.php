@@ -11,6 +11,7 @@ class UpdatePartidoRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'minuto_final' => 'nullable|integer|min:0|max:200',
             'equipo_local' => 'sometimes|string|max:255',
             'equipo_visitante' => 'sometimes|string|max:255',
             'fecha' => 'sometimes|date',

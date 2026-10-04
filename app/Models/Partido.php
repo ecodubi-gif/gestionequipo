@@ -27,7 +27,7 @@ class Partido extends Model
         'goles_visitante',
         'es_local',
         'lugar_citacion',
-        'hora_citacion',
+        'hora_citacion', 'minuto_final'
     ];
 
     public function convocatorias()

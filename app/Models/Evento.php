@@ -8,7 +8,7 @@ class Evento extends Model
 {
     protected $fillable = [
         'partido_id', 'tipo', 'equipo', 'minuto', 'parte',
-        'resultado', 'jugador_id', 'jugador_sale_id', 'jugador_entra_id',
+        'resultado', 'jugador_id', 'jugador_sale_id', 'jugador_entra_id', 'dorsal_rival'
     ];
 
     public function partido() { return $this->belongsTo(Partido::class); }

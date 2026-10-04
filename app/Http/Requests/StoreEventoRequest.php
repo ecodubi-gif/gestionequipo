@@ -11,6 +11,7 @@ class StoreEventoRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'dorsal_rival' => 'nullable|integer|min:1|max:999',
             'tipo' => 'required|in:tiro,corner,amarilla,roja,falta,cambio',
             'equipo' => 'required|in:local,visitante',
             'minuto' => 'required|integer|min:0',
