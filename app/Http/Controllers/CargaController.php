@@ -14,13 +14,23 @@ use Illuminate\Support\Facades\DB;
  * Carga de entrenamiento (RPE).
  * - Duración y RPE medio de cada entreno, y el RPE de cada jugador en el partido:
  *   solo el preparador físico.
- * - Consultar: todos los roles.
+ * - Consultar (carga semanal y RPE de los jugadores): cuerpo técnico, es decir,
+ *   entrenador, segundo entrenador y preparador físico. El delegado no.
  */
 class CargaController extends Controller
 {
     private function exigirPreparador(Request $request): void
     {
         abort_unless($request->user()->role === 'preparador_fisico', 403, 'Solo el preparador físico puede registrar la carga.');
+    }
+
+    private function exigirCuerpoTecnico(Request $request): void
+    {
+        abort_unless(
+            in_array($request->user()->role, ['entrenador', 'segundo_entrenador', 'preparador_fisico'], true),
+            403,
+            'No tienes acceso a la carga de entrenamiento.'
+        );
     }
 
     public function actualizarCarga(Request $request, Entrenamiento $entrenamiento)
@@ -48,8 +58,10 @@ class CargaController extends Controller
         ])->values()->all();
     }
 
-    public function rpePartido(Partido $partido)
+    public function rpePartido(Request $request, Partido $partido)
     {
+        $this->exigirCuerpoTecnico($request);
+
         return response()->json(['data' => $this->formatoRpe(RpePartido::where('partido_id', $partido->id)->get())]);
     }
 
@@ -88,6 +100,8 @@ class CargaController extends Controller
      */
     public function semanas(Request $request)
     {
+        $this->exigirCuerpoTecnico($request);
+
         $datos = $request->validate([
             'lunes' => 'required|date_format:Y-m-d',
             'semanas' => 'nullable|integer|min:1|max:12',
