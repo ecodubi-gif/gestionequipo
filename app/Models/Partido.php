@@ -44,4 +44,16 @@ class Partido extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * La app manda la fecha como instante UTC ("...Z"). La columna guarda la hora local
+     * sin zona, así que se pasa a la hora de la aplicación (Europe/Madrid) antes de guardarla.
+     * Sin esto, un partido de las 12:00 se guardaría como las 10:00 u 11:00.
+     */
+    public function setFechaAttribute($valor): void
+    {
+        $this->attributes['fecha'] = ($valor === null || $valor === '')
+            ? null
+            : \Illuminate\Support\Carbon::parse($valor)->setTimezone(config('app.timezone'))->format('Y-m-d H:i:s');
+    }
 }
