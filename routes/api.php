@@ -43,3 +43,5 @@ Route::middleware('auth:sanctum')->group(function () {
 require __DIR__ . '/plan_sesion.php';
 
 require __DIR__ . '/carga.php';
+
+require __DIR__ . '/tareas.php';
