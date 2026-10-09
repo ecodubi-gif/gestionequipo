@@ -49,7 +49,7 @@ class TareaSesionController extends Controller
         $datos = $request->validate([
             'bloque' => 'required|in:rueda_perfiles,activacion,parte_central,cierre_tactico',
             'nombre' => 'required|string|max:120',
-            'objetivo' => 'nullable|in:mecanica,mixta,alta_velocidad,sprint',
+            'objetivo' => 'nullable|in:recuperacion,compensacion,fuerza,puesta_a_punto',
             'referencia' => 'required|in:porterias,miniporterias,sin_referencia',
             'n_ataque' => 'required|integer|min:0|max:20',
             'n_defensa' => 'required|integer|min:0|max:20',
