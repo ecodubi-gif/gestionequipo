@@ -32,6 +32,13 @@ class PartidoController extends Controller
     public function update(UpdatePartidoRequest $request, Partido $partido)
     {
         $this->authorize('update', $partido);
+        // El delegado solo lleva el partido en directo (estado, goles y minuto final);
+        // los datos del partido son del cuerpo técnico.
+        $protegidos = ['equipo_local', 'equipo_visitante', 'fecha', 'lugar', 'es_local', 'lugar_citacion', 'hora_citacion'];
+        if ($request->user()->role === 'delegado' && array_intersect(array_keys($request->validated()), $protegidos)) {
+            abort(403, 'No tienes permiso para cambiar los datos del partido.');
+        }
+
         $partido->update($request->validated());
         return new PartidoResource($partido);
     }
