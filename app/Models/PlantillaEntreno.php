@@ -13,10 +13,11 @@ class PlantillaEntreno extends Model
 {
     protected $table = 'plantillas_entreno';
 
-    protected $fillable = ['numero', 'preventivo', 'movilidad'];
+    protected $fillable = ['numero', 'preventivo', 'movilidad', 'semana'];
 
     protected $casts = [
         'preventivo' => 'array',
         'movilidad' => 'array',
+        'semana' => 'array',
     ];
 }

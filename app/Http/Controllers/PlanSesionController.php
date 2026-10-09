@@ -28,6 +28,7 @@ class PlanSesionController extends Controller
             'numero' => $p->numero,
             'preventivo' => $p->preventivo,
             'movilidad' => $p->movilidad,
+            'semana' => $p->semana,
         ];
     }
 
@@ -61,6 +62,48 @@ class PlanSesionController extends Controller
         if (array_key_exists('movilidad', $datos)) {
             $plantilla->movilidad = array_values($datos['movilidad']);
         }
+        $plantilla->save();
+
+        return response()->json(['data' => $this->formato($plantilla)]);
+    }
+
+    private const ROLES_SEMANA = ['entrenador', 'segundo_entrenador', 'preparador_fisico'];
+
+    /**
+     * Perfil del día y tareas propuestas de un tipo de entreno (la "plantilla de semana").
+     * Entrenador, segundo y preparador físico pueden cambiarla.
+     */
+    public function actualizarSemana(Request $request, int $numero)
+    {
+        $this->exigirRol($request, self::ROLES_SEMANA);
+
+        $datos = $request->validate([
+            'semana' => 'required|array',
+            'semana.fase' => 'nullable|string|max:200',
+            'semana.puntal' => 'nullable|string|max:200',
+            'semana.densidad' => 'nullable|string|max:200',
+            'semana.gestion' => 'nullable|string|max:1500',
+            'semana.tareas' => 'nullable|array|max:12',
+            'semana.tareas.*.bloque' => 'required|in:rueda_perfiles,activacion,parte_central,cierre_tactico',
+            'semana.tareas.*.nombre' => 'required|string|max:120',
+            'semana.tareas.*.objetivo' => 'nullable|in:recuperacion,compensacion,fuerza,puesta_a_punto',
+            'semana.tareas.*.referencia' => 'required|in:porterias,miniporterias,sin_referencia',
+            'semana.tareas.*.n_ataque' => 'required|integer|min:0|max:20',
+            'semana.tareas.*.n_defensa' => 'required|integer|min:0|max:20',
+            'semana.tareas.*.n_comodines' => 'required|integer|min:0|max:20',
+            'semana.tareas.*.n_porteros' => 'required|integer|min:0|max:4',
+            'semana.tareas.*.largo' => 'nullable|integer|min:5|max:110',
+            'semana.tareas.*.ancho' => 'nullable|integer|min:5|max:75',
+            'semana.tareas.*.series' => 'required|integer|min:1|max:20',
+            'semana.tareas.*.duracion_seg' => 'nullable|integer|min:5|max:3600',
+            'semana.tareas.*.pausa_seg' => 'nullable|integer|min:0|max:600',
+            'semana.tareas.*.descripcion' => 'nullable|string|max:2000',
+        ]);
+
+        $plantilla = PlantillaEntreno::where('numero', $numero)->firstOrFail();
+        $semana = $datos['semana'];
+        $semana['tareas'] = array_values($semana['tareas'] ?? []);
+        $plantilla->semana = $semana;
         $plantilla->save();
 
         return response()->json(['data' => $this->formato($plantilla)]);

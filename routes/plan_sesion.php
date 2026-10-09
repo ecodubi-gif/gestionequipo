@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/plantillas-entreno', [PlanSesionController::class, 'plantillas']);
     Route::put('/plantillas-entreno/{numero}', [PlanSesionController::class, 'actualizarPlantilla'])->whereNumber('numero');
+    Route::put('/plantillas-entreno/{numero}/semana', [PlanSesionController::class, 'actualizarSemana'])->whereNumber('numero');
     Route::put('/entrenamientos/{entrenamiento}/bloques', [PlanSesionController::class, 'actualizarBloques']);
     Route::put('/entrenamientos/{entrenamiento}/tipo-sesion', [PlanSesionController::class, 'actualizarTipo']);
 });
