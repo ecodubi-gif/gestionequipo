@@ -38,6 +38,7 @@ class TareaSesionController extends Controller
             'ancho' => $t->ancho,
             'series' => $t->series,
             'duracion_min' => $t->duracion_min,
+            'duracion_seg' => $t->duracion_seg ?? ($t->duracion_min ? $t->duracion_min * 60 : null),
             'pausa_seg' => $t->pausa_seg,
             'descripcion' => $t->descripcion,
             'jugadores' => $t->jugadores ?? [],
@@ -59,6 +60,7 @@ class TareaSesionController extends Controller
             'ancho' => 'nullable|integer|min:5|max:75',
             'series' => 'required|integer|min:1|max:20',
             'duracion_min' => 'nullable|integer|min:1|max:60',
+            'duracion_seg' => 'nullable|integer|min:5|max:3600',
             'pausa_seg' => 'nullable|integer|min:0|max:600',
             'descripcion' => 'nullable|string|max:2000',
             'jugadores' => 'nullable|array|max:40',
@@ -70,6 +72,13 @@ class TareaSesionController extends Controller
         abort_if(count($ids) !== count(array_unique($ids)), 422, 'Un jugador no puede estar dos veces en la misma tarea.');
 
         $datos['jugadores'] = array_values($datos['jugadores'] ?? []);
+
+        // Segundos y minutos siempre coherentes: manda lo que venga en segundos; si solo vienen minutos, se pasan a segundos.
+        if (! empty($datos['duracion_seg'])) {
+            $datos['duracion_min'] = max(1, (int) round($datos['duracion_seg'] / 60));
+        } elseif (! empty($datos['duracion_min'])) {
+            $datos['duracion_seg'] = $datos['duracion_min'] * 60;
+        }
 
         return $datos;
     }
