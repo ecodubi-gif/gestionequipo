@@ -45,3 +45,5 @@ require __DIR__ . '/plan_sesion.php';
 require __DIR__ . '/carga.php';
 
 require __DIR__ . '/tareas.php';
+
+require __DIR__ . '/biblioteca.php';
